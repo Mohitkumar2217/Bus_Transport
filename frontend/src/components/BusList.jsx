@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 
 const SSE_URL = "http://localhost:4000/buses/events";
 
-// simple haversine distance
 function haversine([lat1, lon1], [lat2, lon2]) {
-  const R = 6371; // km
-  const toRad = (deg) => deg * Math.PI / 180;
+  const R = 6371;
+  const toRad = (deg) => deg * (Math.PI / 180);
   const dLat = toRad(lat2 - lat1);
   const dLon = toRad(lon2 - lon1);
   const a =
@@ -17,6 +16,7 @@ function haversine([lat1, lon1], [lat2, lon2]) {
 
 export default function BusList() {
   const [buses, setBuses] = useState([]);
+  const stop = [12.9750, 77.5975];
 
   useEffect(() => {
     const es = new EventSource(SSE_URL);
@@ -28,20 +28,17 @@ export default function BusList() {
           setBuses(payload.buses);
         }
       } catch (err) {
-        console.error("SSE parse error", err);
+        console.error(err);
       }
     };
 
     es.onerror = (err) => {
-      console.error("SSE connection error", err);
+      console.error("SSE error", err);
       es.close();
     };
 
     return () => es.close();
   }, []);
-
-  // Example: compute ETA to a fixed stop
-  const stop = [12.9750, 77.5975];
 
   return (
     <div className="bus-list">
@@ -53,8 +50,7 @@ export default function BusList() {
         {buses.map((b) => {
           const distKm = haversine([b.lat, b.lng], stop);
           const speedKmph = b.speedKmph || 20;
-          const etaMin = speedKmph > 0 ? Math.round((distKm / speedKmph) * 60) : null;
-
+          const etaMin = speedKmph > 0 ? Math.round((distKm / speedKmph) * 60) : "—";
           return (
             <li key={b.id}>
               <div className="bus-row">
@@ -65,7 +61,7 @@ export default function BusList() {
                   LatLng: {b.lat.toFixed(4)}, {b.lng.toFixed(4)}
                 </div>
                 <div>Distance to stop: {distKm.toFixed(2)} km</div>
-                <div>ETA: {etaMin !== null ? `${etaMin} min` : "—"}</div>
+                <div>ETA: {etaMin} min</div>
               </div>
             </li>
           );

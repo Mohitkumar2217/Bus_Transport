@@ -1,7 +1,7 @@
 import React from "react";
 import MapView from "./components/MapView";
 import BusList from "./components/BusList";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/Navbar"; 
 
 export default function App() {
   return (
