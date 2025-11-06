@@ -1,42 +1,40 @@
 import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
 import MapView from "./components/MapView";
 import BusList from "./components/BusList";
-import Navbar from "./components/Navbar";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
+import ProtectedRoute from "./components/ProtectedRoute";
+import AuthProvider from "./context/AuthContext";
 import "./App.css";
 
 export default function App() {
   return (
-    <div className="app">
+    <AuthProvider>
+      <Router>
+        <Navbar />
 
-      {/* Navbar */}
-      <Navbar></Navbar>
-
-      {/* Hero Section */}
-      {/* <header className="hero">
-        <div className="hero-content">
-          <h1>Smart Bus Tracker</h1>
-          <p>Powered by Mapbox GL JS · Real‑time GPS · SSE updates</p>
-          <a className="cta" href="#map">View map</a>
-        </div>
-      </header> */}
-
-      {/* Main Content */}
-      <main className="main">
-        <section id="map" className="map-section">
-          <MapView />
-        </section>
-
-        <aside id="buslist" className="sidebar">
-          <BusList />
-        </aside>
-      </main>
-
-      {/* Footer */}
-      <footer className="footer">
-        <small>© 2025 Your Company • Prototype • Data simulated</small>
-      </footer>
-
-    </div>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <main className="main">
+                  <section id="map" className="map-section">
+                    <MapView />
+                  </section>
+                  <aside id="buslist" className="sidebar">
+                    <BusList />
+                  </aside>
+                </main>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
-

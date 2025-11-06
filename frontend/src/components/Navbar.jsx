@@ -1,20 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext"; // assuming you have auth context
 import "./Navbar.css";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [language, setLanguage] = useState("English");
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login"); // redirect after logout
+  };
 
   return (
     <nav className="nav_header">
       <div className="nav_header-left">
-        <a href="/" className="nav_brand">
+        <Link to="/" className="nav_brand">
           <div className="nav_logo">
             {/* Put your SVG logo here */}
             <svg width="126" height="28" viewBox="0 0 126 28" fill="none"></svg>
           </div>
-        </a>
+        </Link>
       </div>
 
       <div className="nav_header-right">
@@ -29,20 +38,18 @@ export default function Navbar() {
             </div>
             {langOpen && (
               <nav className="nav_lang-dd">
-                <a
-                  href="#"
+                <button
                   onClick={() => { setLanguage("English"); setLangOpen(false); }}
                   className="nav_lang-text"
                 >
                   English
-                </a>
-                <a
-                  href="#"
+                </button>
+                <button
                   onClick={() => { setLanguage("日本語"); setLangOpen(false); }}
                   className="nav_lang-text"
                 >
                   日本語 (Japanese)
-                </a>
+                </button>
               </nav>
             )}
           </div>
@@ -50,15 +57,27 @@ export default function Navbar() {
 
         {/* Actions */}
         <div className="nav_control-actions">
-          <a href="/contact/" className="nav_text-cta">
+          <Link to="/contact" className="nav_text-cta">
             Contact us
-          </a>
-          <a href="/login" className="nav_text-cta">
-            Log in
-          </a>
-          <a href="/signup" className="button is-nav">
-            Sign up
-          </a>
+          </Link>
+
+          {user ? (
+            <>
+              <span>Welcome, {user.username}</span>
+              <button onClick={handleLogout} className="nav_text-cta">
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="nav_text-cta">
+                Log in
+              </Link>
+              <Link to="/signup" className="button is-nav">
+                Sign up
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile menu toggle */}
@@ -74,9 +93,9 @@ export default function Navbar() {
       {/* Optional mobile menu */}
       {menuOpen && (
         <div className="mobile-menu">
-          <a href="#map">Map</a>
-          <a href="#buslist">Buses</a>
-          <a href="#about">About</a>
+          <Link to="/">Map</Link>
+          <Link to="/">Buses</Link>
+          <Link to="/about">About</Link>
         </div>
       )}
     </nav>
