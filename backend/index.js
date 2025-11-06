@@ -1,15 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 const PORT = 4000;
+const mongoose = require("mongoose");
+const authRoutes = require("./routes/auth");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const authRoutes = require("./routes/auth");
 
 // Routes
 const routeRoutes = require("./routes/routes");
