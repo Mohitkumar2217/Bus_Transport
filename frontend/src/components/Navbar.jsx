@@ -50,13 +50,13 @@ export default function Navbar() {
 
         {/* Actions */}
         <div className="nav_control-actions">
-          <a href="http://localhost:4000/contact/" className="nav_text-cta">
+          <a href="/contact/" className="nav_text-cta">
             Contact us
           </a>
-          <a href="http://localhost:4000/auth/signin" className="nav_text-cta">
+          <a href="/login" className="nav_text-cta">
             Log in
           </a>
-          <a href="http://localhost:4000/auth/signup" className="button is-nav">
+          <a href="/signup" className="button is-nav">
             Sign up
           </a>
         </div>
