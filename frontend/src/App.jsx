@@ -1,16 +1,16 @@
 import React from "react";
-import MapView from "./MapView";
-import BusList from "./BusList";
+import MapView from "./components/MapView";
+import BusList from "./components/BusList";
 import Navbar from "./components/Navbar";
 
 export default function App() {
   return (
     <div className="app">
       <Navbar></Navbar>
-      <main className="main">
-        <div className="map-container">
+      <main className="app-main">
+        <section className="map-section">
           <MapView />
-        </div>
+        </section>
         <aside className="sidebar">
           <BusList />
         </aside>

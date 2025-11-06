@@ -1,0 +1,92 @@
+/* General */
+body, html, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.app-header {
+  background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.app-main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Map Section */
+.map-section {
+  flex: 2;
+  position: relative;
+}
+
+.map-section #map {
+  width: 100%;
+  height: 100%;
+}
+
+/* Sidebar */
+.sidebar {
+  flex: 1;
+  padding: 15px;
+  background: #f7f7f7;
+  overflow-y: auto;
+  border-left: 1px solid #ccc;
+}
+
+.sidebar h3 {
+  margin-top: 0;
+}
+
+.bus-list ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.bus-row {
+  border-bottom: 1px solid #ddd;
+  padding: 8px 0;
+}
+
+.muted {
+  color: #555;
+  font-size: 0.9rem;
+}
+
+/* Footer */
+.app-footer {
+  background: #f0f0f0;
+  text-align: center;
+  padding: 8px;
+  font-size: 0.85rem;
+  border-top: 1px solid #ccc;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .app-main {
+    flex-direction: column;
+  }
+  .map-section {
+    height: 50vh;
+  }
+  .sidebar {
+    height: 50vh;
+    border-left: none;
+    border-top: 1px solid #ccc;
+  }
+}
