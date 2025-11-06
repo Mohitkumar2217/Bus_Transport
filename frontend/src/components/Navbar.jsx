@@ -50,13 +50,13 @@ export default function Navbar() {
 
         {/* Actions */}
         <div className="nav_control-actions">
-          <a href="https://www.mapbox.com/contact/" className="nav_text-cta">
+          <a href="http://localhost:4000/contact/" className="nav_text-cta">
             Contact us
           </a>
-          <a href="https://account.mapbox.com/auth/signin" className="nav_text-cta">
+          <a href="http://localhost:4000/auth/signin" className="nav_text-cta">
             Log in
           </a>
-          <a href="https://account.mapbox.com/auth/signup" className="button is-nav">
+          <a href="http://localhost:4000/auth/signup" className="button is-nav">
             Sign up
           </a>
         </div>
