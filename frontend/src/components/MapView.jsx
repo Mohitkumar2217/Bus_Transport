@@ -14,7 +14,7 @@ export default function MapView() {
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
-      attribution: "© OpenStreetMap contributors",
+      attribution: "© Mohit kumar",
     }).addTo(mapRef.current);
 
     return () => mapRef.current && mapRef.current.remove();
@@ -56,5 +56,5 @@ export default function MapView() {
     return () => evtSource.close();
   }, []);
 
-  return <div id="map" style={{ width: "100%", height: "100vh" }} />;
+  return <div id="map" style={{ width: "80%", height: "40vh" }} />;
 }
