@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
-
-const SSE_URL = "http://localhost:4000/buses/events";
+import { SSE_URL } from "../config";
 
 export default function MapView() {
   const mapRef = useRef(null);

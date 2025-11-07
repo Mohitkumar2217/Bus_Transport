@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-
-const SSE_URL = "http://localhost:4000/buses/events";
+import { SSE_URL } from "../config";
 
 function haversine([lat1, lon1], [lat2, lon2]) {
   const R = 6371;

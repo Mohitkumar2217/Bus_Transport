@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../config";
 import "./AuthForm.css"; // shared styles for login/signup cards
 
 export default function Login() {
@@ -19,7 +20,10 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:4000/api/auth/login", { email, password });
+      const res = await axios.post(`${API_URL}/api/auth/login`, {
+        email,
+        password,
+      });
       login(res.data.user);
       navigate("/"); // redirect to home
     } catch (err) {

@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../config";
 import "./AuthForm.css";
 
 export default function Signup() {
@@ -20,7 +21,11 @@ export default function Signup() {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:4000/api/auth/signup", { username, email, password });
+      const res = await axios.post(`${API_URL}/api/auth/signup`, {
+        username,
+        email,
+        password,
+      });
       login(res.data.user);
       navigate("/"); // redirect after signup
     } catch (err) {
