@@ -1,4 +1,6 @@
-const User = require("../models/user");
+// Correct
+const User = require("../models/User"); // uppercase U
+
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
