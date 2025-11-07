@@ -1,128 +1,175 @@
-# Bus_Transport
-## Overview
+```markdown
+# Smart Bus Tracker
 
-`Bus_Transport` is a project designed to manage and facilitate bus transportation operations. It provides features such as route management, bus scheduling, passenger booking, and administration. The system is built to be user-friendly and scalable.
-
----
-
-## Features
-
-* Manage bus routes (create, edit, delete routes)
-* Schedule buses on different routes with defined timings
-* Book seats for passengers, view availability
-* Admin dashboard for managing buses, drivers, and routes
-* User interface for passengers to view schedules and book tickets
-* Reports/analytics (optional) for bus utilisation and bookings
+A **real-time bus tracking web application** built with **MERN stack** (MongoDB, Express.js, React, Node.js) that allows users to track buses on a map, view live positions, and estimate arrival times at a stop. Includes authentication (signup/login) for a modern, secure experience.
 
 ---
 
-## Technology Stack
+## 🚀 Features
 
-* Backend: *(e.g., Java / Spring Boot / Node.js / Django – adjust as per your implementation)*
-* Database: *(e.g., MySQL / PostgreSQL / MongoDB)*
-* Frontend: *(e.g., HTML/CSS/JavaScript / React / Angular)*
-* Development tools: *(e.g., Git, Maven/Gradle/NPM)*
-
----
-
-## Installation
-
-1. Clone the repository
-
-   ```bash
-   git clone https://github.com/Mohitkumar2217/Bus_Transport.git  
-   cd Bus_Transport  
-   ```
-2. Setup the database
-
-   * Create a new database (e.g., `bus_transport_db`)
-   * Update the database connection settings in `application.properties` (or equivalent configuration file)
-3. Build the application
-
-   ```bash
-   # for Java/Spring Boot example  
-   mvn clean install  
-   ```
-4. Run the application
-
-   ```bash
-   mvn spring-boot:run  
-   ```
-
-   Or execute the startup script/command for your stack.
-5. Access the application
-
-   * Open your browser and navigate to `http://localhost:8080` (or the configured port)
-   * Login (use default admin credentials if provided)
+- **User Authentication**: Secure signup and login with JWT tokens.
+- **Live Bus Tracking**: Real-time bus locations streamed via **Server-Sent Events (SSE)**.
+- **Route Management**: Predefined routes with multiple buses per route.
+- **ETA Calculation**: Approximate distance and estimated arrival time to a sample stop.
+- **Interactive Map**: Leaflet.js map showing live bus locations with markers and popups.
+- **Responsive Design**: Modern UI with navbar, sidebar, and mobile-friendly layout.
 
 ---
 
-## Usage
+## 🛠️ Tech Stack
 
-### Admin Module
-
-* Login as admin
-* Add/manage buses, drivers, and routes
-* Schedule buses and set seat capacities
-* View reports on booking status and bus utilisation
-
-### Passenger Module
-
-* View list of upcoming bus schedules by route
-* Select a schedule and view available seats
-* Book seats by providing passenger information and payment (if applicable)
-* Obtain booking confirmation/receipt
+- **Frontend**: React, React Router, Axios, Leaflet.js
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB (local or Atlas)
+- **Authentication**: JWT (JSON Web Tokens)
+- **Styling**: CSS, responsive layout
 
 ---
 
-## Configuration
+## 📂 Project Structure
 
-* `application.properties` (or `.env`, config file) holds settings like:
+```
 
-  ```properties
-  spring.datasource.url=jdbc:mysql://localhost:3306/bus_transport_db  
-  spring.datasource.username=your_username  
-  spring.datasource.password=your_password  
-  server.port=8080  
-  ```
-* You can configure email/SMS notifications, logging levels, seat-pricing strategies, etc.
+Bus_Transport/
+├─ backend/
+│  ├─ controllers/
+│  │  ├─ authController.js
+│  │  ├─ busController.js
+│  │  └─ routeController.js
+│  ├─ data/
+│  │  └─ routesData.js
+│  ├─ middleware/
+│  │  └─ authMiddleware.js
+│  ├─ models/
+│  │  └─ user.js
+│  ├─ routes/
+│  │  ├─ auth.js
+│  │  ├─ buses.js
+│  │  └─ routes.js
+│  └─ index.js
+├─ frontend/
+│  ├─ components/
+│  │  ├─ BusList.jsx
+│  │  ├─ MapView.jsx
+│  │  ├─ Navbar.jsx
+│  │  ├─ Login.jsx
+│  │  ├─ Signup.jsx
+│  │  └─ ProtectedRoute.jsx
+│  ├─ context/
+│  │  └─ AuthContext.jsx
+│  ├─ App.jsx
+│  ├─ main.jsx
+│  └─ styles/
+│     ├─ Navbar.css
+│     └─ styles.css
+├─ package.json
+└─ README.md
 
----
-
-## Database Schema
-
-The basic schema includes tables like:
-
-* `buses` (id, bus_number, capacity, driver_id, etc)
-* `routes` (id, start_location, end_location, distance, etc)
-* `schedules` (id, route_id, bus_id, departure_time, arrival_time)
-* `bookings` (id, schedule_id, passenger_id, seat_number, booking_time)
-* `passengers` (id, name, contact_info, etc)
-* `drivers` (id, name, licence_number, contact_info, etc)
-
----
-
-## Contributing
-
-Thank you for your interest in contributing!
-
-1. Fork the repository
-2. Create a new branch: `git checkout -b feature/YourFeature`
-3. Make your changes & commit your work
-4. Push to your branch: `git push origin feature/YourFeature`
-5. Create a Pull Request with a clear description of your changes
-
----
-
-## Licence
-
-This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
+````
 
 ---
 
-## Contact
+## ⚡ Installation
 
-Project maintained by **Mohitkumar2217**.
-For questions or suggestions, feel free to open an issue or contact via your preferred channel.
+### **Backend**
+
+1. Navigate to `backend/` folder:
+
+```bash
+cd backend
+````
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Create a `.env` file:
+
+```env
+MONGO_URI=mongodb://127.0.0.1:27017/smartbus
+JWT_SECRET=your_jwt_secret
+PORT=4000
+```
+
+4. Start the server:
+
+```bash
+node index.js
+```
+
+Server will run at: `http://localhost:4000`
 
 ---
+
+### **Frontend**
+
+1. Navigate to `frontend/` folder:
+
+```bash
+cd frontend
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Start the development server:
+
+```bash
+npm run dev
+```
+
+Frontend will run at: `http://localhost:5173` (or specified by Vite)
+
+---
+
+## 🔑 Usage
+
+1. **Signup/Login**: Create an account or login using existing credentials.
+2. **View Map**: See live buses moving along their routes on the map.
+3. **Check ETA**: Distance and estimated arrival time to a sample stop displayed in the sidebar.
+4. **Responsive Layout**: Works on desktop and mobile screens.
+
+---
+
+## 🌐 Demo
+
+*(Optional: Add a live demo link if deployed)*
+
+---
+
+## 📌 Notes
+
+* Ensure **MongoDB server is running locally** or use **MongoDB Atlas URI** in `.env`.
+* SSE (Server-Sent Events) handles live bus updates every 1.5 seconds.
+* Passwords are **hashed with bcrypt** before saving.
+
+---
+
+## 🛡️ Security
+
+* JWT authentication secures API endpoints.
+* Passwords are never stored in plain text.
+* Protected routes redirect unauthenticated users to login page.
+
+---
+
+## 📫 Author
+
+Mohit Kumar
+[GitHub](https://github.com/Mohitkumar2217)
+
+---
+
+```
+
+This README covers **all aspects**: project overview, features, tech stack, installation, usage, and security.  
+
+If you want, I can also make a **short, resume-friendly 4-line version** for your portfolio.  
+
+Do you want me to do that too?
+```
