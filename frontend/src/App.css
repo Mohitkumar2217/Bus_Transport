@@ -65,3 +65,9 @@
   .sidebar { height: 50vh; border-left: none; border-top: 1px solid #ddd; }
   .navbar-links { flex-direction: column; gap: 10px; margin-top: 8px; }
 }
+
+.error-msg {
+  color: #ef4444; /* red */
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
