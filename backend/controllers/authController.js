@@ -4,7 +4,7 @@ require("dotenv").config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-exports.signup = async (req, res) => {
+const signup = async (req, res) => {
   const { username, email, password } = req.body;
   try {
     const existingUser = await User.findOne({ email });
@@ -21,7 +21,7 @@ exports.signup = async (req, res) => {
   }
 };
 
-exports.login = async (req, res) => {
+const login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -36,3 +36,5 @@ exports.login = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+module.exports = { login, signup };
