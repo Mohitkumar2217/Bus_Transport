@@ -41,7 +41,7 @@
   cursor: pointer;
   padding: 6px 12px;
   border-radius: 4px;
-  transition: background 0.3s;
+  transition: color 0.3s;
 }
 
 .nav_lang-toggle:hover {
@@ -51,12 +51,11 @@
 .nav_lang-dd {
   position: absolute;
   top: 36px;
-  right: 0;
-  background: white;
+  right: 0; 
   color: #333;
   border-radius: 6px;
   overflow: hidden;
-  min-width: 140px;
+  min-width: 80px;
   box-shadow: 0 8px 16px rgba(0,0,0,0.15);
   display: flex;
   flex-direction: column;
@@ -67,7 +66,7 @@
   padding: 10px 14px;
   text-decoration: none;
   color: #333;
-  transition: background 0.2s;
+  transition: color 0.2s;
 }
 
 .nav_lang-dd a:hover {
@@ -81,15 +80,23 @@
   gap: 12px;
 }
 
-.nav_text-cta {
-  color: white;
+.nav_text-cta { 
+  font-weight: bold; 
+  color: #333;
+  border-radius: 6px;
+  overflow: hidden;
+  min-width: 80px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: row;
+  padding: 10px 14px;
   text-decoration: none;
-  font-weight: bold;
+  color: #333;
   transition: color 0.2s;
+  z-index: 100;
 }
-
 .nav_text-cta:hover {
-  color: #fcd34d;
+  background: #f3f4f6;
 }
 
 .button.is-nav {
@@ -163,3 +170,4 @@
     display: block;
   }
 }
+

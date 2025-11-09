@@ -73,7 +73,7 @@ export default function Navbar() {
               <Link to="/login" className="nav_text-cta">
                 Log in
               </Link>
-              <Link to="/signup" className="button is-nav">
+              <Link to="/signup" className="button nav_text-cta">
                 Sign up
               </Link>
             </>
