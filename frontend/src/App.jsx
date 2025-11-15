@@ -8,22 +8,13 @@ import Signup from "./components/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AuthProvider from "./context/AuthContext";
 import "./App.css";
-import BannerImage from "./assets/banner.png"; // <- your image path
+import BannerImage from "./assets/banner.png"; // your banner image
 
 export default function App() {
   return (
     <AuthProvider>
       <Router>
         <Navbar />
-
-        {/* Banner Image */}
-        <div className="banner-container">
-          <img
-            src={BannerImage}
-            alt="Bus Transport Banner"
-            className="banner-image"
-          />
-        </div>
 
         <Routes>
           <Route path="/login" element={<Login />} />
@@ -32,14 +23,25 @@ export default function App() {
             path="/"
             element={
               <ProtectedRoute>
-                <main className="main">
-                  <section id="map" className="map-section">
-                    <MapView />
-                  </section>
-                  <aside id="buslist" className="sidebar">
-                    <BusList />
-                  </aside>
-                </main>
+                <>
+                  {/* Banner only on dashboard */}
+                  <div className="banner-container">
+                    <img
+                      src={BannerImage}
+                      alt="Bus Transport Banner"
+                      className="banner-image"
+                    />
+                  </div>
+
+                  <main className="main">
+                    <section id="map" className="map-section">
+                      <MapView />
+                    </section>
+                    <aside id="buslist" className="sidebar">
+                      <BusList />
+                    </aside>
+                  </main>
+                </>
               </ProtectedRoute>
             }
           />
