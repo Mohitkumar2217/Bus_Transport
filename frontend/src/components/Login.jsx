@@ -3,7 +3,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../config";
-import "./AuthForm.css"; // shared styles for login/signup cards
+import "./AuthForm.css"; 
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -20,14 +20,28 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await axios.post(`${API_URL}/api/auth/login`, {
-        email,
-        password,
-      });
-      login(res.data.user);
-      navigate("/"); // redirect to home
+      const res = await axios.post(
+        `${API_URL}/api/auth/login`,
+        { email, password },
+        { withCredentials: false }
+      );
+
+      // backend response must be:  { token, user }
+      const { token, user } = res.data;
+
+      if (!token || !user) {
+        setError("Invalid server response");
+        setLoading(false);
+        return;
+      }
+
+      // store token + user
+      login(token, user);
+
+      navigate("/");
     } catch (err) {
-      setError(err.response?.data?.error || "Login failed");
+      const msg = err.response?.data?.error || "Login failed";
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -46,6 +60,7 @@ export default function Login() {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+
           <input
             type="password"
             placeholder="Password"
@@ -53,12 +68,18 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+
           <button type="submit" disabled={loading}>
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+
         <p>
-          Don’t have an account? <span className="auth-link" onClick={() => navigate("/signup")}>Sign Up</span>
+          Don’t have an account?
+          <span className="auth-link" onClick={() => navigate("/signup")}>
+            {" "}
+            Sign Up
+          </span>
         </p>
       </div>
     </div>

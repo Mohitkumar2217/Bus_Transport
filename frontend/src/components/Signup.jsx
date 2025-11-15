@@ -21,13 +21,24 @@ export default function Signup() {
     setLoading(true);
 
     try {
-      const res = await axios.post(`${API_URL}/api/auth/signup`, {
-        username,
-        email,
-        password,
-      });
-      login(res.data.user);
-      navigate("/"); // redirect after signup
+      const res = await axios.post(
+        `${API_URL}/api/auth/signup`,
+        { username, email, password },
+        { withCredentials: false }
+      );
+
+      const { token, user } = res.data;
+
+      if (!token || !user) {
+        setError("Invalid server response");
+        setLoading(false);
+        return;
+      }
+
+      // Save token + user in context
+      login(token, user);
+
+      navigate("/");
     } catch (err) {
       setError(err.response?.data?.error || "Signup failed");
     } finally {
@@ -40,6 +51,7 @@ export default function Signup() {
       <div className="auth-card">
         <h2>Sign Up</h2>
         {error && <div className="auth-error">{error}</div>}
+
         <form onSubmit={handleSubmit}>
           <input
             type="text"
@@ -48,6 +60,7 @@ export default function Signup() {
             onChange={(e) => setUsername(e.target.value)}
             required
           />
+
           <input
             type="email"
             placeholder="Email"
@@ -55,6 +68,7 @@ export default function Signup() {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+
           <input
             type="password"
             placeholder="Password"
@@ -62,12 +76,17 @@ export default function Signup() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+
           <button type="submit" disabled={loading}>
             {loading ? "Signing up..." : "Sign Up"}
           </button>
         </form>
+
         <p>
-          Already have an account? <span className="auth-link" onClick={() => navigate("/login")}>Login</span>
+          Already have an account?{" "}
+          <span className="auth-link" onClick={() => navigate("/login")}>
+            Login
+          </span>
         </p>
       </div>
     </div>
