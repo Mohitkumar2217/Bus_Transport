@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { SSE_URL } from "../config";
+import React, { useEffect, useState, useContext } from "react";
+import { SSE_URL, API_URL } from "../config";
+import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
+import BookingForm from "./BookingForm"; // Booking form component
 
 // Haversine formula to calculate distance between two coordinates
 function haversine([lat1, lon1], [lat2, lon2]) {
@@ -20,8 +23,11 @@ function haversine([lat1, lon1], [lat2, lon2]) {
 
 export default function BusList() {
   const [buses, setBuses] = useState([]);
+  const [loading, setLoading] = useState(true);
   const stop = [12.9750, 77.5975]; // sample stop coordinates
+  const { user, token } = useContext(AuthContext);
 
+  // SSE for live bus updates
   useEffect(() => {
     const es = new EventSource(SSE_URL);
 
@@ -30,6 +36,7 @@ export default function BusList() {
         const payload = JSON.parse(e.data);
         if (payload.type === "init" || payload.type === "update") {
           setBuses(payload.buses || []);
+          setLoading(false);
         }
       } catch (err) {
         console.error("Failed to parse SSE payload", err);
@@ -44,6 +51,8 @@ export default function BusList() {
     return () => es.close();
   }, []);
 
+  if (loading) return <p>Loading live buses...</p>;
+
   return (
     <div className="bus-list">
       <h3>Live Buses</h3>
@@ -53,6 +62,7 @@ export default function BusList() {
 
       <ul>
         {buses.length === 0 && <li>No buses available</li>}
+
         {buses.map((b) => {
           const distKm = haversine([b.lat, b.lng], stop);
           const speedKmph = b.speedKmph || 20;
@@ -69,6 +79,9 @@ export default function BusList() {
                 </div>
                 <div>Distance to stop: {distKm.toFixed(2)} km</div>
                 <div>ETA: {etaMin} min</div>
+
+                {/* Show booking form only if user is logged in */}
+                {user && <BookingForm bus={b} />}
               </div>
             </li>
           );

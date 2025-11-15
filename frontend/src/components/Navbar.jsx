@@ -22,7 +22,7 @@ export default function Navbar() {
       <div className="nav_header-left">
         <Link to="/" className="nav_brand">
           <div className="nav_logo">
-            {/* SVG logo placeholder */}
+            {/* Replace with your SVG or logo */}
             <svg width="126" height="28" viewBox="0 0 126 28" fill="none"></svg>
           </div>
         </Link>
@@ -72,7 +72,10 @@ export default function Navbar() {
 
           {user ? (
             <>
-              <span>Welcome, {user.username || user.name}</span>
+              <span className="nav_welcome">Welcome, {user.username || user.name}</span>
+              <Link to="/dashboard" className="nav_text-cta">
+                Dashboard
+              </Link>
               <button onClick={handleLogout} className="nav_text-cta">
                 Logout
               </button>
@@ -82,7 +85,7 @@ export default function Navbar() {
               <Link to="/login" className="nav_text-cta">
                 Log in
               </Link>
-              <Link to="/signup" className="button nav_text-cta">
+              <Link to="/signup" className="nav_text-cta button">
                 Sign up
               </Link>
             </>
@@ -105,9 +108,39 @@ export default function Navbar() {
       {/* Mobile menu links */}
       {menuOpen && (
         <div className="mobile-menu">
-          <Link to="/">Map</Link>
-          <Link to="/">Buses</Link>
-          <Link to="/about">About</Link>
+          <Link to="/" onClick={() => setMenuOpen(false)}>
+            Map
+          </Link>
+          <Link to="/" onClick={() => setMenuOpen(false)}>
+            Buses
+          </Link>
+          <Link to="/about" onClick={() => setMenuOpen(false)}>
+            About
+          </Link>
+          {user ? (
+            <>
+              <Link to="/dashboard" onClick={() => setMenuOpen(false)}>
+                Dashboard
+              </Link>
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setMenuOpen(false);
+                }}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" onClick={() => setMenuOpen(false)}>
+                Log in
+              </Link>
+              <Link to="/signup" onClick={() => setMenuOpen(false)}>
+                Sign up
+              </Link>
+            </>
+          )}
         </div>
       )}
     </nav>

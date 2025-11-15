@@ -8,6 +8,7 @@ import Signup from "./components/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AuthProvider from "./context/AuthContext";
 import "./App.css";
+import BannerImage from "./assets/banner.png"; // <- your image path
 
 export default function App() {
   return (
@@ -15,12 +16,18 @@ export default function App() {
       <Router>
         <Navbar />
 
+        {/* Banner Image */}
+        <div className="banner-container">
+          <img
+            src={BannerImage}
+            alt="Bus Transport Banner"
+            className="banner-image"
+          />
+        </div>
+
         <Routes>
-          {/* Public routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-
-          {/* Protected home page */}
           <Route
             path="/"
             element={
