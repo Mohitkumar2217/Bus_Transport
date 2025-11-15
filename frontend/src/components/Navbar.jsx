@@ -1,146 +1,87 @@
 import React, { useState, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import Login from "./Login";
+import Signup from "./Signup";
 import "./Navbar.css";
 
-export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [langOpen, setLangOpen] = useState(false);
-  const [language, setLanguage] = useState("English");
-
+export default function Navbar({ scrollToBooking }) {
   const { user, logout } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const [showAccountMenu, setShowAccountMenu] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(null); // "login" | "signup"
 
   const handleLogout = () => {
-    logout(); // clears token + user
-    navigate("/login"); // redirect after logout
+    logout();
+    setShowAccountMenu(false);
   };
 
   return (
-    <nav className="nav_header">
-      {/* Left: Logo */}
-      <div className="nav_header-left">
-        <Link to="/" className="nav_brand">
-          <div className="nav_logo">
-            {/* Replace with your SVG or logo */}
-            <svg width="126" height="28" viewBox="0 0 126 28" fill="none"></svg>
-          </div>
-        </Link>
+    <nav className="navbar">
+      <div className="navbar-left">
+        <button className="btn-book-ticket" onClick={scrollToBooking}>
+          Book Ticket
+        </button>
       </div>
 
-      {/* Right: Language selector & actions */}
-      <div className="nav_header-right">
-        {/* Language selector */}
-        <div className="nav_control-language">
-          <div className="nav_lang-dropdown">
-            <div
-              className="nav_lang-toggle"
-              onClick={() => setLangOpen(!langOpen)}
-            >
-              {language}
-            </div>
-            {langOpen && (
-              <nav className="nav_lang-dd">
-                <button
-                  onClick={() => {
-                    setLanguage("English");
-                    setLangOpen(false);
-                  }}
-                  className="nav_lang-text"
-                >
-                  English
-                </button>
-                <button
-                  onClick={() => {
-                    setLanguage("日本語");
-                    setLangOpen(false);
-                  }}
-                  className="nav_lang-text"
-                >
-                  日本語
-                </button>
-              </nav>
-            )}
-          </div>
-        </div>
+      <div className="navbar-right">
+        {/* Bookings */}
+        <button
+          className="btn-bookings"
+          onClick={() => scrollToBooking("bookings")}
+        >
+          Bookings
+        </button>
 
-        {/* Actions */}
-        <div className="nav_control-actions">
-          <Link to="/contact" className="nav_text-cta">
-            Contact us
-          </Link>
+        {/* Search Bar */}
+        <input
+          type="text"
+          placeholder="Search Bus..."
+          className="navbar-search"
+        />
 
-          {user ? (
-            <>
-              <span className="nav_welcome">Welcome, {user.username || user.name}</span>
-              <Link to="/dashboard" className="nav_text-cta">
-                Dashboard
-              </Link>
-              <button onClick={handleLogout} className="nav_text-cta">
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="nav_text-cta">
-                Log in
-              </Link>
-              <Link to="/signup" className="nav_text-cta button">
-                Sign up
-              </Link>
-            </>
-          )}
-        </div>
-
-        {/* Mobile menu toggle */}
-        <div className="nav_control-menu-toggle">
+        {/* Account */}
+        <div className="account-container">
           <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="nav_menu-toggle"
+            className="btn-account"
+            onClick={() => setShowAccountMenu(!showAccountMenu)}
           >
-            <div className="nav_menu-toggle-bar is-top"></div>
-            <div className="nav_menu-toggle-bar is-middle"></div>
-            <div className="nav_menu-toggle-bar is-bottom"></div>
+            {user ? user.username : "Account"}
           </button>
+
+          {showAccountMenu && (
+            <div className="account-menu">
+              {user ? (
+                <>
+                  <button>Profile</button>
+                  <button>Privacy</button>
+                  <button onClick={handleLogout}>Logout</button>
+                  <button>Information</button>
+                </>
+              ) : (
+                <>
+                  <button onClick={() => setShowAuthModal("login")}>
+                    Login
+                  </button>
+                  <button onClick={() => setShowAuthModal("signup")}>
+                    Signup
+                  </button>
+                </>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Mobile menu links */}
-      {menuOpen && (
-        <div className="mobile-menu">
-          <Link to="/" onClick={() => setMenuOpen(false)}>
-            Map
-          </Link>
-          <Link to="/" onClick={() => setMenuOpen(false)}>
-            Buses
-          </Link>
-          <Link to="/about" onClick={() => setMenuOpen(false)}>
-            About
-          </Link>
-          {user ? (
-            <>
-              <Link to="/dashboard" onClick={() => setMenuOpen(false)}>
-                Dashboard
-              </Link>
-              <button
-                onClick={() => {
-                  handleLogout();
-                  setMenuOpen(false);
-                }}
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" onClick={() => setMenuOpen(false)}>
-                Log in
-              </Link>
-              <Link to="/signup" onClick={() => setMenuOpen(false)}>
-                Sign up
-              </Link>
-            </>
-          )}
+      {/* Modal for Login/Signup */}
+      {showAuthModal === "login" && (
+        <div className="auth-modal">
+          <Login />
+          <button onClick={() => setShowAuthModal(null)}>Close</button>
+        </div>
+      )}
+      {showAuthModal === "signup" && (
+        <div className="auth-modal">
+          <Signup />
+          <button onClick={() => setShowAuthModal(null)}>Close</button>
         </div>
       )}
     </nav>

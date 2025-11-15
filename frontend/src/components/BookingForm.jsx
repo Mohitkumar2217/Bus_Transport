@@ -1,38 +1,49 @@
 import React, { useState, useContext } from "react";
-import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
-import { API_URL } from "../config";
 
-export default function BookingForm({ bus }) {
-  const { token } = useContext(AuthContext);
-  const [seatNumber, setSeatNumber] = useState("");
-  const [message, setMessage] = useState("");
+export default function BookingForm({ onSearch }) {
+  const { user } = useContext(AuthContext);
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
+  const [date, setDate] = useState("");
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
-  const handleBooking = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post(
-        `${API_URL}/api/booking/book`,
-        { busId: bus.id, routeId: bus.routeId, seatNumber },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setMessage(res.data.message);
-    } catch (err) {
-      setMessage(err.response?.data?.message || "Booking failed");
+  const handleSearch = () => {
+    if (!user) {
+      setShowAuthModal(true);
+      return;
     }
+    onSearch({ from, to, date });
   };
 
   return (
-    <form onSubmit={handleBooking}>
+    <div className="booking-form">
+      <h2>Book Your Bus</h2>
       <input
-        type="number"
-        placeholder="Seat Number"
-        value={seatNumber}
-        onChange={(e) => setSeatNumber(e.target.value)}
-        required
+        type="text"
+        placeholder="From"
+        value={from}
+        onChange={(e) => setFrom(e.target.value)}
       />
-      <button type="submit">Book Seat</button>
-      {message && <p>{message}</p>}
-    </form>
+      <input
+        type="text"
+        placeholder="To"
+        value={to}
+        onChange={(e) => setTo(e.target.value)}
+      />
+      <input
+        type="date"
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
+      />
+      <button onClick={handleSearch}>Search Bus</button>
+
+      {showAuthModal && (
+        <div className="auth-modal">
+          <p>Please login or signup to continue</p>
+          {/* You can insert Login / Signup component here */}
+        </div>
+      )}
+    </div>
   );
 }
