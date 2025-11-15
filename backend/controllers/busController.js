@@ -1,38 +1,55 @@
+// backend/controller/busController.js
+
 const { buses, routes } = require("../data/routesData");
 
-// Move bus forward by one step
+// ---------------------- MOVE A BUS ONE STEP ----------------------
 function advanceBus(bus) {
-  const r = routes[bus.routeId];
-  bus.idx = (bus.idx + 1) % r.length;
-  bus.lat = r[bus.idx][0];
-  bus.lng = r[bus.idx][1];
+  const route = routes[bus.routeId];
+  if (!route || route.length === 0) return;
+
+  bus.idx = (bus.idx + 1) % route.length;
+
+  const [lat, lng] = route[bus.idx];
+  bus.lat = lat;
+  bus.lng = lng;
   bus.timestamp = Date.now();
 }
 
-// advance all buses every 3s
+// Auto-advance buses every 3 seconds
 setInterval(() => {
   buses.forEach(advanceBus);
 }, 3000);
 
+// ---------------------- GET ALL BUSES ----------------------
 exports.getBuses = (req, res) => {
-  res.json(buses);
+  try {
+    return res.json(buses);
+  } catch (err) {
+    return res.status(500).json({ error: "Failed to get buses" });
+  }
 };
 
-// SSE streaming
+// ---------------------- STREAM BUS UPDATES (SSE) ----------------------
 exports.streamBusEvents = (req, res) => {
   res.set({
     "Cache-Control": "no-cache",
     "Content-Type": "text/event-stream",
-    Connection: "keep-alive",
+    Connection: "keep-alive"
   });
+
+  // Required for SSE
   res.flushHeaders();
 
-  // send initial payload
+  // Send initial state
   res.write(`data: ${JSON.stringify({ type: "init", buses })}\n\n`);
 
-  const handle = setInterval(() => {
+  // Send updates every 1.5 seconds
+  const intervalId = setInterval(() => {
     res.write(`data: ${JSON.stringify({ type: "update", buses })}\n\n`);
   }, 1500);
 
-  req.on("close", () => clearInterval(handle));
+  // Clean up when client disconnects
+  req.on("close", () => {
+    clearInterval(intervalId);
+  });
 };
