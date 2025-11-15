@@ -1,88 +1,114 @@
-// backend/controller/authController.js
-
-const User = require("../models/User");
+const User = require("../models/user");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Generate a JWT token
-const generateToken = (userId) => {
-  return jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: "1d" });
+// Generate JWT token
+const generateToken = (user) => {
+  return jwt.sign(
+    {
+      id: user._id,
+      email: user.email,
+    },
+    JWT_SECRET,
+    { expiresIn: "7d" }
+  );
 };
 
-// ---------------------- SIGNUP ----------------------
-const signup = async (req, res) => {
-  const { username, email, password } = req.body;
-
-  // Basic validation
-  if (!username || !email || !password) {
-    return res.status(400).json({ error: "All fields are required" });
-  }
-
+// ===================== SIGNUP =====================
+exports.signup = async (req, res) => {
   try {
-    // Check if email is already registered
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ error: "Email already registered" });
+    const { name, email, password } = req.body;
+
+    // Check missing fields
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
     }
 
+    // Check if user exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     // Create user
-    const user = new User({ username, email, password });
-    await user.save();
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+    });
 
-    // Sign token
-    const token = generateToken(user._id);
+    await newUser.save();
 
-    return res.status(201).json({
+    // Token
+    const token = generateToken(newUser);
+
+    res.status(201).json({
       message: "Signup successful",
       token,
       user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
+        id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
       },
     });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-// ---------------------- LOGIN ----------------------
-const login = async (req, res) => {
-  const { email, password } = req.body;
-
-  // Basic validation
-  if (!email || !password) {
-    return res.status(400).json({ error: "Email and password required" });
-  }
-
+// ===================== LOGIN =====================
+exports.login = async (req, res) => {
   try {
+    const { email, password } = req.body;
+
+    // Missing fields
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email & Password required" });
+    }
+
+    // Check user
     const user = await User.findOne({ email });
-    if (!user)
-      return res.status(400).json({ error: "Invalid email or password" });
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
 
-    const match = await user.comparePassword(password);
-    if (!match)
-      return res.status(400).json({ error: "Invalid email or password" });
+    // Check password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Incorrect password" });
+    }
 
-    const token = generateToken(user._id);
+    // Token
+    const token = generateToken(user);
 
-    return res.json({
+    res.status(200).json({
       message: "Login successful",
       token,
       user: {
         id: user._id,
-        username: user.username,
+        name: user.name,
         email: user.email,
       },
     });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-module.exports = {
-  signup,
-  login,
+// ===================== PROTECTED USER INFO =====================
+exports.getUserProfile = async (req, res) => {
+  try {
+    res.json({
+      id: req.user.id,
+      email: req.user.email,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
 };
