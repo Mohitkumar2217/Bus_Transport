@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import './Bookingform.css'
 
 export default function BookingForm({ onSearch }) {
   const { user } = useContext(AuthContext);

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import Login from "./Login";
+import Login from "./Login"; 
 import Signup from "./Signup";
 import "./Navbar.css";
 
