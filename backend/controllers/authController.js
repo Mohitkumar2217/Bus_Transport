@@ -10,7 +10,7 @@ const generateToken = (user) => {
   return jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, { expiresIn: "7d" });
 };
 
-// ================= SIGNUP =================
+// ================ SIGNUP ================
 exports.signup = async (req, res) => {
   try {
     const { username, email, password } = req.body;
