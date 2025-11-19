@@ -1,5 +1,5 @@
 ```markdown
-# Smart Bus Tracker
+# Smart Bus Tracker 1
 
 A **real-time bus tracking web application** built with **MERN stack** (MongoDB, Express.js, React, Node.js) that allows users to track buses on a map, view live positions, and estimate arrival times at a stop. Includes authentication (signup/login) for a modern, secure experience.
 
